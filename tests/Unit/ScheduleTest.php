@@ -15,12 +15,30 @@ class ScheduleTest extends TestCase
      */
     public function testExample()
     {
-        $response = $this->json('POST', 'api/schedule', ['name' => 'Sally','email'=> 'k@k.com']);
+        $response = $this->json('POST', 'api/schedule', ['start_date' => '2017-10-01',
+                                                         'days_per_week'=> [0,2,4],
+                                                         'chapter_sessions'=> 6]);
 
         $response
             ->assertStatus(200)
             ->assertJson([
-                'created' => true,
+                'sessions' => true,
             ]);
     }
+
+
+    public function testStartDateFormat()
+    {
+        $response = $this->json('POST', 'api/schedule', ['start_date' => '2017/10/01',
+                                                                'days_per_week'=> [0,2,4],
+                                                                'chapter_sessions'=> 6]);
+        $response
+            ->assertStatus(400)
+            ->assertJson([
+                'start_date' => true,
+            ]);
+    }
+
+
+
 }
